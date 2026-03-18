@@ -11,45 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout source code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      # 3️⃣ Cache Maven dependencies for faster builds
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          restore-keys: ${{ runner.os }}-maven-
 
-      # 4️⃣ Build the project
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
-
-      # 5️⃣ Run tests and generate JaCoCo coverage report
-      - name: Run tests and JaCoCo
-        run: mvn test jacoco:report
-
-      # 6️⃣ Commit generated CSV if build succeeds
-      - name: Commit benchmark CSV
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add target/*.csv
-          git commit -m "Update benchmark results" || echo "No changes to commit"
-
-      # 7️⃣ Push changes back to main
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+      - name: Build and Test
+        run: mvn clean install
