@@ -59,5 +59,4 @@ public interface IntegerList {
      */
     public int size();
 
-
 }

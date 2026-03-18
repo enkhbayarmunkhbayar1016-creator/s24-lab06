@@ -1,57 +1,82 @@
 package edu.cmu.cs.cs214.rec04;
 
-/**
- * Main class for Recitation 5. This can be used as sandbox to experiment in.
- * @author Nora Shoemaker
- *
- */
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DelegationSortedIntList list = new DelegationSortedIntList();
 
-        /** 
-         * This is a sandbox to experiment in.
-         * Uncomment the following code to play with your implementation 
-         * Select all and (CTRL + /) or (COMMAND + /)
-         * Feel free to write more to test your implementation. 
-         * */
+        // --- ТАНЫ ХҮССЭН ХЭСЭГ: ЭХЛЭЭД ХЭДЭН ТОО НЭМЭХИЙГ АСУУХ ---
+        System.out.print("Хэдэн ширхэг тоо нэмэх вэ? ");
+        int count = scanner.nextInt();
 
-        // IntegerList list1;
-        // SortedIntList list2;
+        for (int i = 0; i < count; i++) {
+            System.out.print((i + 1) + "-р тоог оруулна уу: ");
+            int num = scanner.nextInt();
+            list.add(num);
+        }
+        // -------------------------------------------------------
 
-        // list1 = new DelegationSortedIntList();
-        // list2 = new InheritanceSortedIntList();
+        boolean running = true;
+        System.out.println("\n--- ОДОО УДИРДЛАГЫН ЦЭС РҮҮ ШИЛЖЛЭЭ ---");
 
-        // // add 5 elements to our first list.
-        // list1.add(1);
-        // list1.add(3);
-        // list1.add(2);
-        // list1.add(4);
-        // list1.add(2);
+        while (running) {
+            System.out.println("\nОдоогийн жагсаалт: ");
+            printList(list);
+            System.out.println("Нийт нэмэгдсэн оролдлого (totalAdded): " + list.getTotalAdded());
+            
+            System.out.println("\nДараагийн үйлдлээ сонгоно уу:");
+            System.out.println("1. Дахин тоо нэмэх (Add)");
+            System.out.println("2. Тоо устгах (Remove)");
+            System.out.println("3. Програмаас гарах (Exit)");
+            System.out.print("Таны сонголт: ");
 
-        // printList(list1);
-        // System.out.println(list1.getTotalAdded());
+            int choice = scanner.nextInt();
 
-        // // add 2 elements to a second list.
-        // list2.add(3);
-        // list2.add(0);
+            switch (choice) {
+                case 1:
+                    System.out.print("Нэмэх тоогоо оруулна уу: ");
+                    int addNum = scanner.nextInt();
+                    list.add(addNum);
+                    break;
 
+                case 2:
+                    if (list.size() == 0) {
+                        System.out.println("Устгах тоо алга, жагсаалт хоосон байна!");
+                        break;
+                    }
+                    System.out.print("Устгах тоогоо оруулна уу: ");
+                    int removeNum = scanner.nextInt();
+                    if (list.remove(removeNum)) {
+                        System.out.println(removeNum + " амжилттай устлаа.");
+                    } else {
+                        System.out.println(removeNum + " жагсаалтад алга.");
+                    }
+                    break;
 
-        // // add the first list (5 elements) to our second list (2 elements).
-        // list2.addAll(list1);
+                case 3:
+                    running = false;
+                    System.out.println("Програм дууслаа. Баяртай!");
+                    break;
 
-        // printList(list2);
-        // System.out.println(list2.getTotalAdded());
+                default:
+                    System.out.println("Буруу сонголт! Дахин оролдоно уу.");
+            }
+        }
+        scanner.close();
     }
 
-    /**
-     * A helper function that prints out the contents of an IntegerList.
-     * @param list IntegerList to be printed out.
-     */
     private static void printList(IntegerList list) {
-        for (int i = 0; i < list.size(); i++) {
-            System.out.print(list.get(i));
-            System.out.print(", ");
+        if (list.size() == 0) {
+            System.out.print("[ Хоосон ]");
+        } else {
+            System.out.print("[ ");
+            for (int i = 0; i < list.size(); i++) {
+                System.out.print(list.get(i) + (i == list.size() - 1 ? "" : ", "));
+            }
+            System.out.print(" ]");
         }
         System.out.println();
     }
